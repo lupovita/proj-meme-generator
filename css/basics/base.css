@@ -1,0 +1,86 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    background-color: var(--clr-bg);
+    font-family: Lato, sans-serif;
+    color: var(--clr-base);
+}
+
+body {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 1em;
+}
+
+h2 {
+    font-family: Lato-Bold, sans-serif;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    letter-spacing: 0.0625rem;
+}
+
+p {
+    margin: 0 0 1em;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* BUTTONS */
+.btn {
+    font-family: Eurofurence, sans-serif;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+
+    background-color: transparent;
+    color: inherit;
+
+    padding: .5em 1.25em;
+    border: 2px solid var(--clr-outline--1);
+
+    cursor: pointer;
+
+    transition: .4s;
+}
+
+.btn.rounded {
+    border-radius: 2em;
+}
+
+.btn.hover:hover {
+    color: var(--clr-outline-1);
+    border-color: var(--clr-outline-1);
+}
+
+/* INPUTS & LABELS */
+input,
+label {
+    font-family: inherit;
+    font-size: 1em;
+    padding: .3em .6em;
+    border: 1px solid var(--clr-outline);
+    border-radius: .5em;
+}
+
+input:invalid {
+    color: red;
+}
+
+input[type=color],
+input[type=range] {
+    cursor: pointer;
+}

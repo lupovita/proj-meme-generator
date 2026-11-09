@@ -1,0 +1,51 @@
+/* Eurofurence */
+@font-face {
+    font-family: Eurofurence;
+    src: url(../../fonts/Eurofurence/Eurofurence-Regular.ttf);
+}
+
+/* Lato */
+@font-face {
+    font-family: Lato;
+    src: url(../../fonts/Lato/Lato-Regular.ttf);
+}
+
+@font-face {
+    font-family: Lato-Bold;
+    src: url(../../fonts/Lato/Lato-Bold.ttf);
+}
+
+/* Font Awesome */
+@font-face {
+    font-family: fab;
+    src: url(../../fonts/fa/fa-brands-400.woff2);
+}
+
+@font-face {
+    font-family: fas;
+    src: url(../../fonts/fa/fa-solid-900.woff2);
+}
+
+.fab::before {
+    font-family: fab;
+}
+
+.fab.logo-symbol::before {
+    content: '\e86b';
+}
+
+.fas::before {
+    font-family: fas;
+}
+
+.fas.location-marker::before {
+    content: '\f3c5';
+}
+
+.fas.location::before {
+    content: '\f601';
+}
+
+.fas.csv::before {
+    content: '\f6dd';
+}

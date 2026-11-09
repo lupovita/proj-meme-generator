@@ -4,11 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FAVICON -->
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- JS -->
+    <!-- Controllers -->
+    <script defer src="js/controllers/gallery.controller.js"></script>
+    <script defer src="js/controllers/meme.controller.js"></script>
+    <!-- Services -->
+    <script defer src="js/services/util.service.js"></script>
+    <script defer src="js/services/upload.service.js"></script>
+    <script defer src="js/services/gallery.service.js"></script>
+    <script defer src="js/services/meme.service.js"></script>
+    <!-- Main -->
+    <script defer src="js/main.js"></script>
+
     <title>Meme Generator</title>
 </head>
 
-<body>
+<body onload="onInit()" onresize="onResize()">
+    <header class="main-header">
+        <img class="logo" src="img/LOGO.png" alt="logo">
 
+        <nav class="main-nav">
+            <ul class="grid grid-column clean-list">
+                <li><a href="#" class="active">Gallery</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+
+        <button class="btn-toggle-menu btn rounded hover" type="button"
+            onclick="onToggleMenu()">☰</button>
+    </header>
+
+    <section class="gallery">
+        <section class="filter-panel">
+            <input type="text" name="filter-by-text">
+        </section>
+
+        <div class="imgs-container"></div>
+    </section>
+
+    <section class="meme-editor">
+
+        <section class="canvas-container">
+            <canvas width="400" height="400"></canvas>
+            <!-- onmousedown="onDown(event)" onmousemove="onMove(event)"
+                onmouseup="onUp()" onmouseleave="onCanvasLeave()" ontouchstart="onDown(event)"
+                ontouchmove="onMove(event)" ontouchend="onUp()">
+            </canvas> -->
+        </section>
+
+        <section class="meme-editor-panel">
+            <input type="text" name="line-text" oninput="onChangeText(this.value)">
+        </section>
+
+    </section>
 </body>
 
 </html>
