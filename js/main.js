@@ -1,8 +1,8 @@
 'use strict';
 
 function onInit() {
-    initCanvas();
     renderGallery();
+    initCanvas();
 }
 
 function onResize() {

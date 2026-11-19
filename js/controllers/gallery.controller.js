@@ -11,3 +11,15 @@ function onSelectImg(imgId) {
     setImg(imgId);
     renderMeme();
 }
+
+// Upload image from user device.
+
+function onImgInput(ev) {
+    loadImageFromInput(
+        ev,
+        (img) => {
+            setUploadedImg(img)
+            renderMeme();
+        }
+    );
+}

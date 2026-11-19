@@ -14,15 +14,3 @@ function getRandomId(idLength) {
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
-// Storage
-
-function saveToStorage(key, value) {
-    const json = JSON.stringify(value);
-    localStorage.setItem(key, json);
-}
-
-function loadFromStorage(key) {
-    const json = localStorage.getItem(key);
-    return JSON.parse(json);
-}

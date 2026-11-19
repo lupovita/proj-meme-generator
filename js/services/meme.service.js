@@ -1,13 +1,13 @@
 'use strict';
 
 let gMeme = {
-    selectedImgId: '1',
+    selectedImgId: '',
     selectedLineIdx: 0,
     lines: [
         {
-            txt: 'I sometimes eat Falafel',
+            txt: 'Add text here',
             size: 30,
-            color: 'red'
+            color: 'white'
         }
     ]
 };
@@ -17,6 +17,7 @@ function getMeme() {
 }
 
 function getMemeImg() {
+    if (gMeme.uploadedImg) return gMeme.uploadedImg;
     return getImgById(gMeme.selectedImgId);
 }
 
@@ -30,4 +31,14 @@ function setLineText(text) {
 
 function setImg(imgId) {
     gMeme.selectedImgId = imgId;
+    gMeme.uploadedImg = '';
+}
+
+function getUploadedImg() {
+    return gMeme.uploadedImg;
+}
+
+function setUploadedImg(img) {
+    gMeme.uploadedImg = { url: img.src };
+    gMeme.selectedImgId = '';
 }
