@@ -46,13 +46,13 @@
 
     <section class="gallery">
         <section class="filter-panel">
-            <input type="text" name="filter-by-text">
+            <input type="text" class="filter-by-text">
         </section>
 
         <section class="upload-img-container">
             <!-- <label> -->
-                <span class="my-h fs3">Add background:</span>
-                <input type="file" class="file-input btn" name="image" onchange="onImgInput(event)">
+            <span class="my-h fs3">Add background:</span>
+            <input type="file" class="btn file-input" onchange="onImgInput(event)">
             <!-- </label> -->
         </section>
 
@@ -61,15 +61,33 @@
 
     <section class="meme-editor">
         <section class="canvas-container">
-            <canvas width="400" height="400"></canvas>
-            <!-- onmousedown="onDown(event)" onmousemove="onMove(event)"
+            <canvas width="400" height="400" onmousedown="onDown(event)" onmousemove="onMove(event)"
                 onmouseup="onUp()" onmouseleave="onCanvasLeave()" ontouchstart="onDown(event)"
                 ontouchmove="onMove(event)" ontouchend="onUp()">
-            </canvas> -->
+            </canvas>
         </section>
 
         <section class="meme-editor-panel">
-            <input type="text" name="line-text" oninput="onChangeText(this.value)">
+            <input type="text" class="line-text" oninput="onSetLineText(this.value)">
+
+            <section class="line-btns-container">
+                <button class="btn switch-line" onclick="onSwitchLine()">Switch Line</button>
+
+                <button class="btn add-line" onclick="onAddLine()">Add Line</button>
+
+                <button class="btn delete-line" onclick="onDeleteLine()">Delete Line</button>
+            </section>
+
+            <section class="font-editor-panel">
+                <label class="font-size">
+                    <span>A+-</span>
+                    <input type="number" class="line-font-size" min="1" max="100"
+                        oninput="onSetLineSize(+this.value)">
+                </label>
+
+                <input type="color" class="line-color" onchange="onSetLineColor(this.value)">
+
+            </section>
         </section>
 
         <section class="download-save-container">

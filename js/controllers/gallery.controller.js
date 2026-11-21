@@ -9,6 +9,7 @@ function renderGallery() {
 
 function onSelectImg(imgId) {
     setImg(imgId);
+    renderMemeEditor();
     renderMeme();
 }
 
