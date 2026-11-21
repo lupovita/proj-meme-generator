@@ -1,8 +1,10 @@
 'use strict';
 
+const ID_LENGTH = 6;
+
 // Random generators
 
-function getRandomId(idLength) {
+function getRandomId(idLength = ID_LENGTH) {
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let id = '';
     for (let i = 0; i < idLength; i++) {

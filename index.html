@@ -12,10 +12,6 @@
     <link rel="stylesheet" href="css/main.css">
 
     <!-- JS -->
-    <!-- Controllers -->
-    <script defer src="js/controllers/gallery.controller.js"></script>
-    <script defer src="js/controllers/meme-editor.controller.js"></script>
-    <script defer src="js/controllers/saved-memes.controller.js"></script>
     <!-- Services -->
     <script defer src="js/services/util.service.js"></script>
     <script defer src="js/services/storage.service.js"></script>
@@ -23,6 +19,10 @@
     <script defer src="js/services/gallery.service.js"></script>
     <script defer src="js/services/meme.service.js"></script>
     <script defer src="js/services/saved-memes.service.js"></script>
+    <!-- Controllers -->
+    <script defer src="js/controllers/gallery.controller.js"></script>
+    <script defer src="js/controllers/meme-editor.controller.js"></script>
+    <script defer src="js/controllers/saved-memes.controller.js"></script>
     <!-- Main -->
     <script defer src="js/main.js"></script>
 
@@ -62,23 +62,20 @@
     <section class="meme-editor">
         <section class="canvas-container">
             <canvas width="400" height="400" onmousedown="onDown(event)" onmousemove="onMove(event)"
-                onmouseup="onUp()" onmouseleave="onCanvasLeave()" ontouchstart="onDown(event)"
-                ontouchmove="onMove(event)" ontouchend="onUp()">
+                onmouseup="onUp()" ontouchstart="onDown(event)" ontouchmove="onMove(event)"
+                ontouchend="onUp()">
             </canvas>
         </section>
 
         <section class="meme-editor-panel">
-            <input type="text" class="line-text" oninput="onSetLineText(this.value)">
-
             <section class="line-btns-container">
-                <button class="btn switch-line" onclick="onSwitchLine()">Switch Line</button>
-
                 <button class="btn add-line" onclick="onAddLine()">Add Line</button>
-
-                <button class="btn delete-line" onclick="onDeleteLine()">Delete Line</button>
+                <button class="btn delete-line" onclick="onDeleteLine()" disabled>Delete Line</button>
             </section>
 
             <section class="font-editor-panel">
+                <input type="text" class="line-text" oninput="onSetLineText(this.value)">
+
                 <label class="font-size">
                     <span>A+-</span>
                     <input type="number" class="line-font-size" min="1" max="100"
