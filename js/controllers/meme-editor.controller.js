@@ -1,5 +1,7 @@
 'use strict';
 
+// Globals and Initialization
+
 const gCanvasImg = new Image();
 const CANVAS_SIZE = 400;
 
@@ -12,6 +14,8 @@ function initCanvas() {
     gCtx = gElCanvas.getContext('2d');
     resizeCanvas();
 }
+
+// Resizing & Rendering
 
 function resizeCanvas() {
     const elContainer = document.querySelector('.canvas-container');
@@ -30,11 +34,23 @@ function renderMeme() {
 }
 
 function renderMemeEditor() {
-    const { text, size, color } = getSelectedLine();
-    document.querySelector('input.line-text').value = text;
-    document.querySelector('input.line-font-size').value = size;
-    document.querySelector('input.line-color').value = color;
+    const selectedLine = getSelectedLine();
 
+    if (!selectedLine) {
+        setDisabled('.meme-editor input', true);
+        setDisabled('.btn.delete-line', true);
+    } else {
+        setDisabled('.meme-editor input', false);
+        setDisabled('.btn.delete-line', false);
+        const { text, size, color } = selectedLine;
+        document.querySelector('input.line-text').value = text;
+        document.querySelector('input.line-font-size').value = size;
+        document.querySelector('input.line-color').value = color;
+    }
+}
+
+function setDisabled(selector, isDisabled) {
+    document.querySelectorAll(selector).forEach(elInput => elInput.disabled = isDisabled);
 }
 
 function coverCanvasWithImg(img) {
@@ -42,7 +58,7 @@ function coverCanvasWithImg(img) {
     gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height);
 }
 
-// Set and draw line events
+// Line manipulation events.
 
 function drawLineText(line, lineIdx) {
     // gCtx.lineWidth = 1.5;
@@ -98,12 +114,6 @@ function onSetLineColor(color) {
     renderMeme();
 }
 
-function onSwitchLine() {
-    switchLine();
-    renderMeme();
-    renderMemeEditor();
-}
-
 function onAddLine() {
     addLine();
     renderMeme();
@@ -116,46 +126,47 @@ function onDeleteLine() {
     renderMemeEditor();
 }
 
-// Touch and click events for the canvas.
+// Touch & Click events for the canvas.
 
 function onDown(ev) {
     const pos = getEvPos(ev);
     const selectedLine = getSelectedLineByPos(pos);
-    
-    if (!selectedLine) return;
-    setIsLineDragging(selectedLine, true);
-    selectLine(selectedLine);
+
+    if (!selectedLine) {
+        unselectLine();
+        document.body.style.cursor = 'default';
+    } else {
+        selectLine(selectedLine);
+        setIsLineDragging(true);
+        gStartDragPos = pos;
+        document.body.style.cursor = 'grabbing';
+    }
     renderMeme();
     renderMemeEditor();
-    //Save the pos we start from
-    gStartDragPos = pos;
-    document.body.style.cursor = 'move';
 }
-
-// TODO: finish the dragging action, check if it works on mobile as well.
-// TODO: check how to be able to write(or even make the whole font-editor-panel hover over the line line in word) on top of the canvas and not from the input textbox, also I want to add text cursor when the user double clicks the text on the canvas, and then he'll be able to edit. if the text cursor will flicker that will be perfect.
-// TODO: check after done if there are redundent functions and delete them.
 
 function onMove(ev) {
     const pos = getEvPos(ev);
-    // const { isDrawing } = getBrush();
-    // setPos(pos);
+    const isLineDragging = getIsLineDragging();
 
-    // if (isDrawing) draw();
-    // else renderCanvas();
+    if (isLineDragging) {
+        moveSelectedLine(pos.x - gStartDragPos.x, pos.y - gStartDragPos.y);
+        gStartDragPos = pos;
+        renderMeme();
+    } else {
+        const selectedLine = getSelectedLineByPos(pos);
+        if (selectedLine) document.body.style.cursor = 'grab';
+        else document.body.style.cursor = 'default';
+    }
 }
 
 function onUp() {
-    // setIsDrawing(false);
-    // getCanvasImg().src = getCanvas().toDataURL();
+    setIsLineDragging(false);
+    document.body.style.cursor = 'default';
 }
 
-function onCanvasLeave() {
-    // const { isDrawing } = getBrush();
-    // if (isDrawing) onUp();
-    // setPos(null);
-    // renderCanvas();
-}
+// TODO: check how to be able to write(or even make the whole font-editor-panel hover over the line like in word) on top of the canvas and not from the input textbox, also I want to add text cursor when the user double clicks the text on the canvas, and then he'll be able to edit. if the text cursor will flicker that will be perfect.
+// TODO: check after done if there are redundent functions and delete them.
 
 function getEvPos(ev) {
     const TOUCH_EVS = ['touchstart', 'touchmove', 'touchend'];
@@ -202,25 +213,4 @@ function onUploadMeme(ev) {
     }
 
     uploadImg(canvasData, onSuccess);
-}
-
-function onClearCanvas() {
-    // gCtx.clearRect(0, 0, gElCanvas.width, gElCanvas.height);
-    // ~ Changing the size of the canvas clears it automatically. ~
-    gElCanvas.height = CANVAS_SIZE;
-    gCanvasImg.removeAttribute('src');
-}
-
-// Setters Getters for the Canvas.
-
-function getCanvas() {
-    return gElCanvas;
-}
-
-function getCtx() {
-    return gCtx;
-}
-
-function getCanvasImg() {
-    return gCanvasImg;
 }

@@ -2,7 +2,6 @@
 
 const POS_INCREMENT = 30, CANVAS_WIDTH = 400, CANVAS_HEIGHT = 350;
 const INITIAL_LINE_POS = { x: CANVAS_WIDTH / 2, y: 50 };
-const ID_LENGTH = 6;
 
 let gMeme;
 let gNewLinePos;
@@ -19,7 +18,7 @@ function _createMeme() {
 
 function _createLine() {
     const line = {
-        id: getRandomId(ID_LENGTH),
+        id: getRandomId(),
         text: 'Add Text Here',
         size: 30,
         color: '#FFFFFF',
@@ -55,13 +54,13 @@ function getSelectedLineByPos(pos) {
     return selectedLines.toSorted((l1, l2) => l1.width - l2.width)[0];
 }
 
-// function getLineIdx(line) {
-//     return gMeme.lines.findIndex(l => l.id === line.id);
-// }
+function getLineIdx(line) {
+    return gMeme.lines.findIndex(l => l.id === line.id);
+}
 
-// function setSelectedLineIdx(selectedLineIdx) {
-//     gMeme.selectedLineIdx = selectedLineIdx;
-// }
+function getIsLineDragging() {
+    return gMeme.isLineDragging;
+}
 
 function setLineText(text) {
     getSelectedLine().text = text;
@@ -75,16 +74,16 @@ function setLineColor(color) {
     getSelectedLine().color = color;
 }
 
-function setIsLineDragging(line, isDragging) {
-    line.isDragging = isDragging;
-}
-
-function switchLine() {
-    gMeme.selectedLineIdx = (gMeme.selectedLineIdx + 1) % gMeme.lines.length;
+function setIsLineDragging(isLineDragging) {
+    gMeme.isLineDragging = isLineDragging;
 }
 
 function selectLine(line) {
-    gMeme.selectedLineIdx = gMeme.lines.findIndex(l => l.id === line.id);
+    gMeme.selectedLineIdx = getLineIdx(line);
+}
+
+function unselectLine() {
+    gMeme.selectedLineIdx = -1;
 }
 
 function addLine() {
@@ -101,13 +100,15 @@ function deleteLine(selectedLineIdx) {
     if (selectedLineIdx >= gMeme.lines.length) gMeme.selectedLineIdx = gMeme.lines.length - 1;
 }
 
+function moveSelectedLine(dx, dy) {
+    const selectedLine = getSelectedLine();
+    selectedLine.posCenter.x += dx;
+    selectedLine.posCenter.y += dy;
+}
+
 function setImg(imgId) {
     gMeme.selectedImgId = imgId;
     gMeme.uploadedImg = '';
-}
-
-function getUploadedImg() {
-    return gMeme.uploadedImg;
 }
 
 function setUploadedImg(img) {
