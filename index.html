@@ -20,6 +20,7 @@
     <script defer src="js/services/meme.service.js"></script>
     <script defer src="js/services/saved-memes.service.js"></script>
     <!-- Controllers -->
+    <script defer src="js/controllers/main-nav.controller.js"></script>
     <script defer src="js/controllers/gallery.controller.js"></script>
     <script defer src="js/controllers/meme-editor.controller.js"></script>
     <script defer src="js/controllers/saved-memes.controller.js"></script>
@@ -29,14 +30,16 @@
     <title>Meme Generator</title>
 </head>
 
-<body onload="onInit()" onresize="onResize()">
+<body onload="onInit()" onresize="onResize()" onscroll="onScroll()">
     <header class="main-header">
         <img class="logo" src="img/LOGO.png" alt="logo">
 
         <nav class="main-nav">
             <ul class="grid grid-column clean-list">
-                <li><a href="#" class="active">Gallery</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="#" class="active" onclick="onNavClick(this, '.gallery')">Gallery</a>
+                </li>
+                <li><a href="#" onclick="onNavClick(this, '.saved-memes')">Memes</a></li>
+                <li><a href="#" onclick="onNavClick(this, '.about')">About</a></li>
             </ul>
         </nav>
 
@@ -59,11 +62,11 @@
         <section class="imgs-container"></section>
     </section>
 
-    <section class="meme-editor">
+    <section class="meme-editor hide">
         <section class="canvas-container">
             <canvas width="400" height="400" onmousedown="onDown(event)" onmousemove="onMove(event)"
                 onmouseup="onUp()" ontouchstart="onDown(event)" ontouchmove="onMove(event)"
-                ontouchend="onUp()">
+                ontouchend="onUp()" ondblclick="onDblClick()">
             </canvas>
         </section>
 
@@ -73,7 +76,7 @@
                 <button class="btn delete-line" onclick="onDeleteLine()">Delete Line</button>
             </section>
 
-            <section class="font-editor-panel">
+            <section class="line-editor-panel">
                 <input type="text" class="line-text" oninput="onSetLineText(this.value)">
 
                 <label class="font-size">
@@ -82,28 +85,31 @@
                         oninput="onSetLineSize(+this.value)">
                 </label>
 
-                <input type="color" class="line-color" onchange="onSetLineColor(this.value)">
-
+                <input type="color" class="line-color" oninput="onSetLineColor(this.value)">
             </section>
         </section>
 
         <section class="download-save-container">
-            <a href="#" class="btn btn-primary" onclick="onDownloadMeme(this)"
+            <a href="#" class="btn download-meme" onclick="onDownloadMeme(this)"
                 download="my-meme">Download</a>
 
-            <button class="btn btn-primary" onclick="onSaveMeme()">Save Meme</button>
+            <button class="btn save-meme" onclick="onSaveMeme()">Save Meme</button>
         </section>
 
         <section class="upload-container">
             <form action="" method="POST" enctype="multipart/form-data"
                 onsubmit="onUploadMeme(event)">
                 <input name="img" id="imgData" type="hidden">
-                <button class="btn btn-primary" type="submit">Upload to Cloud</button>
+                <button class="btn upload-meme" type="submit">Upload to Cloud</button>
             </form>
 
             <section class="share-container"></section>
         </section>
     </section>
+
+    <section class="saved-memes hide"></section>
+
+    <section class="about hide"></section>
 </body>
 
 </html>

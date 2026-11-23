@@ -8,16 +8,20 @@ function renderGallery() {
 }
 
 function onSelectImg(imgId) {
-    setImg(imgId);
-    renderMemeEditor();
-    renderMeme();
+    goToMemeEditor(imgId);
 }
 
 // Upload image from user device.
 
 function onImgInput(ev) {
-    loadImageFromInput(ev, (img) => {
-        setUploadedImg(img);
-        renderMeme();
-    });
+    loadImageFromInput(ev, (img) => goToMemeEditor(undefined, img.src));
+}
+
+// Switching to Meme Editor Page
+
+function goToMemeEditor(imgId, uploadedImgUrl) {
+    hideElement('.gallery');
+    document.querySelector('.main-nav .active').classList.remove('active');
+    window.scrollTo(0, 0);
+    initMeme(imgId, uploadedImgUrl);
 }

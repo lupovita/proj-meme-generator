@@ -21,3 +21,11 @@
 
 /* MEDIA QUERIES */
 @import url(setup/mq.css);
+
+.line-editor-panel {
+    position: fixed;
+}
+
+.hide {
+    display: none;
+}

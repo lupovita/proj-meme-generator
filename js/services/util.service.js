@@ -16,3 +16,11 @@ function getRandomId(idLength = ID_LENGTH) {
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
+function showElement(selector) {
+    document.querySelector(selector).classList.remove('hide');
+}
+
+function hideElement(selector) {
+    document.querySelector(selector).classList.add('hide');
+}

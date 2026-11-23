@@ -1,16 +1,16 @@
 'use strict';
-
+// TODO: make these const change dinamically on Resize() - switch to 'let' of course.
 const POS_INCREMENT = 30, CANVAS_WIDTH = 400, CANVAS_HEIGHT = 350;
 const INITIAL_LINE_POS = { x: CANVAS_WIDTH / 2, y: 50 };
 
 let gMeme;
 let gNewLinePos;
 
-_createMeme();
-
-function _createMeme() {
+function createMeme(imgId, uploadedImgUrl) {
     gNewLinePos = { ...INITIAL_LINE_POS };
     gMeme = {
+        selectedImgId: imgId || '',
+        uploadedImg: uploadedImgUrl ? { url: uploadedImgUrl} : '',
         selectedLineIdx: 0,
         lines: [_createLine()]
     };
@@ -106,12 +106,12 @@ function moveSelectedLine(dx, dy) {
     selectedLine.posCenter.y += dy;
 }
 
-function setImg(imgId) {
-    gMeme.selectedImgId = imgId;
-    gMeme.uploadedImg = '';
-}
+// function setImg(imgId) {
+//     gMeme.selectedImgId = imgId;
+//     gMeme.uploadedImg = '';
+// }
 
-function setUploadedImg(img) {
-    gMeme.uploadedImg = { url: img.src };
-    gMeme.selectedImgId = '';
-}
+// function setUploadedImg(img) {
+//     gMeme.uploadedImg = { url: img.src };
+//     gMeme.selectedImgId = '';
+// }

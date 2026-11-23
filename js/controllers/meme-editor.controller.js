@@ -1,5 +1,7 @@
 'use strict';
 
+// TODO: check after done if there are redundent functions and delete them.
+
 // Globals and Initialization
 
 const gCanvasImg = new Image();
@@ -12,6 +14,11 @@ let gStartDragPos;
 function initCanvas() {
     gElCanvas = document.querySelector('canvas');
     gCtx = gElCanvas.getContext('2d');
+}
+
+function initMeme(imgId, uploadedImg) {
+    createMeme(imgId, uploadedImg);
+    renderMemeEditor();
     resizeCanvas();
 }
 
@@ -24,33 +31,31 @@ function resizeCanvas() {
 }
 
 function renderMeme() {
-    if (getImg()) {
+    if (getMeme() && getImg()) {
         gCanvasImg.src = getImg().url;
         gCanvasImg.onload = () => {
             coverCanvasWithImg(gCanvasImg);
             getMeme().lines.forEach((line, idx) => drawLineText(line, idx));
+            setPosLineEditorPanel();
         };
     }
 }
 
 function renderMemeEditor() {
     const selectedLine = getSelectedLine();
+    const elMemeEditor = document.querySelector('.meme-editor');
+    const elBtn = elMemeEditor.querySelector('.btn.delete-line');
+    showElement('.meme-editor');
 
     if (!selectedLine) {
-        setDisabled('.meme-editor input', true);
-        setDisabled('.btn.delete-line', true);
+        elBtn.disabled = true;
     } else {
-        setDisabled('.meme-editor input', false);
-        setDisabled('.btn.delete-line', false);
+        elBtn.disabled = false;
         const { text, size, color } = selectedLine;
-        document.querySelector('input.line-text').value = text;
-        document.querySelector('input.line-font-size').value = size;
-        document.querySelector('input.line-color').value = color;
+        elMemeEditor.querySelector('input.line-text').value = text;
+        elMemeEditor.querySelector('input.line-font-size').value = size;
+        elMemeEditor.querySelector('input.line-color').value = color;
     }
-}
-
-function setDisabled(selector, isDisabled) {
-    document.querySelectorAll(selector).forEach(elInput => elInput.disabled = isDisabled);
 }
 
 function coverCanvasWithImg(img) {
@@ -126,7 +131,7 @@ function onDeleteLine() {
     renderMemeEditor();
 }
 
-// Touch & Click events for the canvas.
+// Touch & Click events (Also Line manipulation).
 
 function onDown(ev) {
     const pos = getEvPos(ev);
@@ -134,6 +139,7 @@ function onDown(ev) {
 
     if (!selectedLine) {
         unselectLine();
+        closeLineEditorPanel();
         document.body.style.cursor = 'default';
     } else {
         selectLine(selectedLine);
@@ -165,28 +171,13 @@ function onUp() {
     document.body.style.cursor = 'default';
 }
 
-// TODO: check how to be able to write(or even make the whole font-editor-panel hover over the line like in word) on top of the canvas and not from the input textbox, also I want to add text cursor when the user double clicks the text on the canvas, and then he'll be able to edit. if the text cursor will flicker that will be perfect.
-// TODO: check after done if there are redundent functions and delete them.
+function onDblClick() {
+    const selectedLine = getSelectedLine();
+    if (selectedLine) openLineEditorPanel();
+}
 
-function getEvPos(ev) {
-    const TOUCH_EVS = ['touchstart', 'touchmove', 'touchend'];
-    let pos = {
-        x: ev.offsetX,
-        y: ev.offsetY,
-    };
-
-    if (TOUCH_EVS.includes(ev.type)) {
-        // Prevent triggering the mouse ev
-        ev.preventDefault();
-        // Gets the first touch point
-        ev = ev.changedTouches[0];
-        // Calc the right pos according to the touch screen
-        pos = {
-            x: ev.pageX - ev.target.offsetLeft - ev.target.clientLeft,
-            y: ev.pageY - ev.target.offsetTop - ev.target.clientTop,
-        };
-    }
-    return pos;
+function onScroll() {
+    setPosLineEditorPanel();
 }
 
 // Upload to cloud and download events.
@@ -213,4 +204,54 @@ function onUploadMeme(ev) {
     }
 
     uploadImg(canvasData, onSuccess);
+}
+
+// UI
+
+function openLineEditorPanel() {
+    showElement('.line-editor-panel');
+    setPosLineEditorPanel();
+}
+
+function closeLineEditorPanel() {
+    hideElement('.line-editor-panel');
+}
+
+function setPosLineEditorPanel() {
+    const elPanel = document.querySelector('.line-editor-panel');
+    const elMemeEditor = document.querySelector('.meme-editor');
+    if (elMemeEditor.classList.contains('hide') || elPanel.classList.contains('hide')) return;
+
+    const canvasRect = gElCanvas.getBoundingClientRect();
+    const selectedLine = getSelectedLine();
+    if (!selectedLine || !selectedLine.posTopLeft) return;
+
+    const x = canvasRect.x; // const x = canvasRect.x + selectedLine.posTopLeft.x;
+    const y = canvasRect.y + selectedLine.posTopLeft.y + selectedLine.height;
+
+    elPanel.style.left = `${x}px`;
+    elPanel.style.top = `${y}px`;
+}
+
+// Helper functions
+
+function getEvPos(ev) {
+    const TOUCH_EVS = ['touchstart', 'touchmove', 'touchend'];
+    let pos = {
+        x: ev.offsetX,
+        y: ev.offsetY,
+    };
+
+    if (TOUCH_EVS.includes(ev.type)) {
+        // Prevent triggering the mouse ev
+        ev.preventDefault();
+        // Gets the first touch point
+        ev = ev.changedTouches[0];
+        // Calc the right pos according to the touch screen
+        pos = {
+            x: ev.pageX - ev.target.offsetLeft - ev.target.clientLeft,
+            y: ev.pageY - ev.target.offsetTop - ev.target.clientTop,
+        };
+    }
+    return pos;
 }
