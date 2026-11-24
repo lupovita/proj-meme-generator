@@ -1,19 +1,20 @@
 'use strict';
-// TODO: make these const change dinamically on Resize() - switch to 'let' of course.
-const POS_INCREMENT = 30, CANVAS_WIDTH = 400, CANVAS_HEIGHT = 350;
-const INITIAL_LINE_POS = { x: CANVAS_WIDTH / 2, y: 50 };
+
+const POS_INCREMENT = 30;
 
 let gMeme;
 let gNewLinePos;
 
-function createMeme(imgId, uploadedImgUrl) {
-    gNewLinePos = { ...INITIAL_LINE_POS };
+function createMeme(imgId, imgUrl, width, height) {
+    gNewLinePos = { x: width / 2, y: POS_INCREMENT * 2 };
     gMeme = {
         selectedImgId: imgId || '',
-        uploadedImg: uploadedImgUrl ? { url: uploadedImgUrl} : '',
-        selectedLineIdx: 0,
-        lines: [_createLine()]
+        uploadedImg: imgUrl ? { url: imgUrl } : '',
+        lines: [],
+        width,
+        height
     };
+    addLine();
 }
 
 function _createLine() {
@@ -29,8 +30,8 @@ function _createLine() {
 }
 
 function _incrementLinePos() {
-    gNewLinePos.x = (gNewLinePos.x + POS_INCREMENT) % CANVAS_WIDTH;
-    gNewLinePos.y = (gNewLinePos.y + POS_INCREMENT) % CANVAS_HEIGHT;
+    gNewLinePos.x = (gNewLinePos.x + POS_INCREMENT) % gMeme.width;
+    gNewLinePos.y = (gNewLinePos.y + POS_INCREMENT) % gMeme.height;
 }
 
 function getMeme() {
@@ -78,6 +79,11 @@ function setIsLineDragging(isLineDragging) {
     gMeme.isLineDragging = isLineDragging;
 }
 
+function setMemeDimensions(width, height) {
+    gMeme.width = width;
+    gMeme.height = height;
+}
+
 function selectLine(line) {
     gMeme.selectedLineIdx = getLineIdx(line);
 }
@@ -94,7 +100,7 @@ function addLine() {
 function deleteLine(selectedLineIdx) {
     gMeme.lines.splice(selectedLineIdx, 1);
     if (!gMeme.lines.length) {
-        gNewLinePos = { ...INITIAL_LINE_POS };
+        gNewLinePos = { x: gMeme.width / 2, y: POS_INCREMENT * 2 };
         addLine();
     }
     if (selectedLineIdx >= gMeme.lines.length) gMeme.selectedLineIdx = gMeme.lines.length - 1;
@@ -105,13 +111,3 @@ function moveSelectedLine(dx, dy) {
     selectedLine.posCenter.x += dx;
     selectedLine.posCenter.y += dy;
 }
-
-// function setImg(imgId) {
-//     gMeme.selectedImgId = imgId;
-//     gMeme.uploadedImg = '';
-// }
-
-// function setUploadedImg(img) {
-//     gMeme.uploadedImg = { url: img.src };
-//     gMeme.selectedImgId = '';
-// }

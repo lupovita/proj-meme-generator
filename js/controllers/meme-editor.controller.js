@@ -5,7 +5,6 @@
 // Globals and Initialization
 
 const gCanvasImg = new Image();
-const CANVAS_SIZE = 400;
 
 let gElCanvas;
 let gCtx;
@@ -17,9 +16,11 @@ function initCanvas() {
 }
 
 function initMeme(imgId, uploadedImg) {
-    createMeme(imgId, uploadedImg);
-    renderMemeEditor();
     resizeCanvas();
+    createMeme(imgId, uploadedImg, gElCanvas.width, gElCanvas.height);
+    renderMeme();
+    renderMemeEditor();
+    openLineEditorPanel();
 }
 
 // Resizing & Rendering
@@ -27,7 +28,6 @@ function initMeme(imgId, uploadedImg) {
 function resizeCanvas() {
     const elContainer = document.querySelector('.canvas-container');
     gElCanvas.width = elContainer.clientWidth;
-    renderMeme();
 }
 
 function renderMeme() {
@@ -35,6 +35,7 @@ function renderMeme() {
         gCanvasImg.src = getImg().url;
         gCanvasImg.onload = () => {
             coverCanvasWithImg(gCanvasImg);
+            setMemeDimensions(gElCanvas.width, gElCanvas.height);
             getMeme().lines.forEach((line, idx) => drawLineText(line, idx));
             setPosLineEditorPanel();
         };
@@ -45,7 +46,6 @@ function renderMemeEditor() {
     const selectedLine = getSelectedLine();
     const elMemeEditor = document.querySelector('.meme-editor');
     const elBtn = elMemeEditor.querySelector('.btn.delete-line');
-    showElement('.meme-editor');
 
     if (!selectedLine) {
         elBtn.disabled = true;
@@ -176,10 +176,6 @@ function onDblClick() {
     if (selectedLine) openLineEditorPanel();
 }
 
-function onScroll() {
-    setPosLineEditorPanel();
-}
-
 // Upload to cloud and download events.
 
 function onDownloadMeme(elLink) {
@@ -226,7 +222,8 @@ function setPosLineEditorPanel() {
     const selectedLine = getSelectedLine();
     if (!selectedLine || !selectedLine.posTopLeft) return;
 
-    const x = canvasRect.x; // const x = canvasRect.x + selectedLine.posTopLeft.x;
+    // const x = canvasRect.x;
+    const x = canvasRect.x + selectedLine.posTopLeft.x;
     const y = canvasRect.y + selectedLine.posTopLeft.y + selectedLine.height;
 
     elPanel.style.left = `${x}px`;
